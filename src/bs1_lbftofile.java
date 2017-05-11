@@ -5,7 +5,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 
-public class lbftofile {
+public class bs1_lbftofile {
     public static void main(String[] args) throws IOException {
         String lbfFileName = args.length > 0 ? args[0] : "Localizedjpn.lbf";
         String lbfFolderName = FilenameUtils.getBaseName(lbfFileName);

@@ -3,7 +3,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 
-public class filetolbf {
+public class bs1_filetolbf {
     public static void main(String[] args) throws IOException {
         String lbfFolderName = args.length > 0 ? args[0] : "Localizedjpn";
         File f = new File(lbfFolderName);
