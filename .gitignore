@@ -1,4 +1,7 @@
 .idea
 out
-BS_LBF*
+BS_LBF.cfg
+BS_LBF.exe
+BS_LBF.idb
+BS_LBF.idp
 *.lbf
