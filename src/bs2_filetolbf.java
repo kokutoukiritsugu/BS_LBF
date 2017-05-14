@@ -26,7 +26,8 @@ public class bs2_filetolbf {
 
             // 4 byte - file size
             File file = new File(lbfFolderName + "\\" + fileName);
-            long fileSize = file.length();
+            // -2 for bom , -2 for end \0
+            long fileSize = file.length() - 2 - 2;
             byte[] fileSizeBytes = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt((int) fileSize).array();
             bos.write(fileSizeBytes);
 
@@ -34,8 +35,12 @@ public class bs2_filetolbf {
             FileInputStream fis = new FileInputStream(file);
             BufferedInputStream bis = new BufferedInputStream(fis);
             byte[] fileContentByte = new byte[(int) fileSize];
+            // skip BOM
+            bis.skip(2);
             bis.read(fileContentByte);
             bos.write(fileContentByte);
+            // wirte end \0
+            bos.write(new byte[]{(byte) 0x00, (byte) 0x00});
             bis.close();
         }
         bos.close();
