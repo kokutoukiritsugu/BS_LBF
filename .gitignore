@@ -1,6 +1,4 @@
 .idea
 out
-BS_LBF.cfg
-BS_LBF.exe
-Localizedjpn.lbf
-Localizedjpn
+BS_LBF*
+*.lbf
