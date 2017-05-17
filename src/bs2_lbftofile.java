@@ -30,33 +30,25 @@ public class bs2_lbftofile {
             // 1~3 bit - file length
             byte[] fileContentSizeByte1 = new byte[1];
             bis.read(fileContentSizeByte1);
-            System.out.printf("0x%02X ", fileContentSizeByte1[0]);
 
             int out = uByte(fileContentSizeByte1[0]);
             if (uByte(fileContentSizeByte1[0]) > 0x3f) {
 
                 byte[] fileContentSizeByte2 = new byte[1];
                 bis.read(fileContentSizeByte2);
-                System.out.printf("0x%02X ", fileContentSizeByte2[0]);
 
                 out += (uByte(fileContentSizeByte2[0]) - 1) * 64;
                 if (uByte(fileContentSizeByte2[0]) > 0x7f) {
 
                     byte[] fileContentSizeByte3 = new byte[1];
                     bis.read(fileContentSizeByte3);
-                    System.out.printf("0x%02X ", fileContentSizeByte3[0]);
 
                     out += (uByte(fileContentSizeByte3[0]) - 1) * 8192;
 
                 }
             }
-            System.out.println();
 
-            System.out.printf("%06X", out);
             int fileContentSize = out * 2 - 2;
-
-            System.out.println();
-            System.out.println();
 
             // file
             byte[] fileContentByte = new byte[fileContentSize];

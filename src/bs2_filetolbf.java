@@ -1,6 +1,4 @@
 import java.io.*;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 
 public class bs2_filetolbf {
@@ -26,15 +24,39 @@ public class bs2_filetolbf {
 
             // 4 byte - file size
             File file = new File(lbfFolderName + "\\" + fileName);
-            // -2 for bom , -2 for end \0
-            long fileSize = file.length() - 2 - 2;
-            byte[] fileSizeBytes = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt((int) fileSize).array();
-            bos.write(fileSizeBytes);
+            // -2 for bom
+            int fileSize = (int) file.length() - 2;
+
+            // 1~3bit magic number
+            // +2 for file end \0
+            int in = (fileSize + 2) / 2;
+            int out = 0;
+            if (in / 8192 <= 0) {
+                if (in / 64 <= 0) {
+                    out = in;
+                    bos.write((byte) (out & 0xff));
+                } else {
+                    out = in % 64 + 64;
+                    bos.write((byte) (out & 0xff));
+
+                    out = in / 64;
+                    bos.write((byte) (out & 0xff));
+                }
+            } else {
+                out = (in % 8192 + 8192) % 64 + 64;
+                bos.write((byte) (out & 0xff));
+
+                out = in % 8192 / 64 + 128;
+                bos.write((byte) (out & 0xff));
+
+                out = in / 8192;
+                bos.write((byte) (out & 0xff));
+            }
 
             // file
             FileInputStream fis = new FileInputStream(file);
             BufferedInputStream bis = new BufferedInputStream(fis);
-            byte[] fileContentByte = new byte[(int) fileSize];
+            byte[] fileContentByte = new byte[fileSize];
             // skip BOM
             bis.skip(2);
             bis.read(fileContentByte);
